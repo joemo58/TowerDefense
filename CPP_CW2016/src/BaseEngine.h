@@ -7,6 +7,9 @@ class DisplayableObject;
 #include "FontManager.h"
 
 #include <assert.h>
+#include <vector>
+
+using namespace std;
 
 class BaseEngine
 {
@@ -217,6 +220,9 @@ public:
 
 	/* Send a specified notification value to all displayable objects. */
 	void NotifyAllObjects( int iSignalNumber );
+
+	/*remove object from vector at index*/
+	void RemoveObject(int iIndex);
 
 	/* Send a specified notification value to all displayable objects and count the number which give a non-zero response. */
 	int NotifyAllObjectsGetCountNonZero( int iSignalNumber );
@@ -765,7 +771,7 @@ private:
 	int m_iDrawableObjectsChanged;
 
 	/* Array of displayable objects - expect it to be modified by sub-class(es) */
-	DisplayableObject** m_ppDisplayableObjects;
+	vector<DisplayableObject*> m_ppDisplayableObjects;
 
 	/* Manager object for the fonts - maintains a cache of fonts to prevent multiple loading of fonts. */
 	FontManager m_oFontManager;

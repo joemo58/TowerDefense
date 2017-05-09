@@ -101,6 +101,18 @@
     <ClInclude Include="Psyjm6Engine.h" />
     <ClInclude Include="Psyjm6Player.h" />
     <ClInclude Include="Psyjm6TileManager.h" />
+    <ClInclude Include="TDBaseEnemy.h" />
+    <ClInclude Include="TDBaseTower.h" />
+    <ClInclude Include="TDBullet.h" />
+    <ClInclude Include="TDFastEnemy.h" />
+    <ClInclude Include="TDHelpState.h" />
+    <ClInclude Include="TDIntroMenu.h" />
+    <ClInclude Include="TDIntroState.h" />
+    <ClInclude Include="TDPlayState.h" />
+    <ClInclude Include="TDState.h" />
+    <ClInclude Include="TDStateManager.h" />
+    <ClInclude Include="TDStrongEnemy.h" />
+    <ClInclude Include="TDTileManager.h" />
     <ClInclude Include="templates.h" />
     <ClInclude Include="TileManager.h" />
     <ClInclude Include="BouncingBall.h" />
@@ -131,6 +143,18 @@
     <ClCompile Include="Psyjm6Player.cpp" />
     <ClCompile Include="Psyjm6TileManager.cpp" />
     <ClCompile Include="SimpleDemo.cpp" />
+    <ClCompile Include="TDBaseEnemy.cpp" />
+    <ClCompile Include="TDBaseTower.cpp" />
+    <ClCompile Include="TDBullet.cpp" />
+    <ClCompile Include="TDFastEnemy.cpp" />
+    <ClCompile Include="TDHelpState.cpp" />
+    <ClCompile Include="TDIntroMenu.cpp" />
+    <ClCompile Include="TDIntroState.cpp" />
+    <ClCompile Include="TDPlayState.cpp" />
+    <ClCompile Include="TDState.cpp" />
+    <ClCompile Include="TDStateManager.cpp" />
+    <ClCompile Include="TDStrongEnemy.cpp" />
+    <ClCompile Include="TDTileManager.cpp" />
     <ClCompile Include="TileManager.cpp" />
     <ClCompile Include="BouncingBall.cpp" />
     <ClCompile Include="BouncingBallMain.cpp" />
@@ -145,6 +169,10 @@
     <ClCompile Include="Demo4Main.cpp" />
     <ClCompile Include="Demo4Object.cpp" />
     <ClCompile Include="Demo4TileManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\git\CPP_CW2016\src\demo.jpg" />
+    <Image Include="..\..\..\G52CPPcw\CPP_CW2016\src\enemy.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

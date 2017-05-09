@@ -45,7 +45,7 @@ void Psyjm6Engine::SetupBackgroundBuffer()
 		"baaaaaaaaaaaaab",
 		"bbbbbbbbbbbbbbb" };
 	
-	//FillBackground(0xffaabb); pink
+	//FillBackground green
 	FillBackground(0x4dff4d);
 
 	/*background painting*/
@@ -92,8 +92,8 @@ void Psyjm6Engine::SetupBackgroundBuffer()
 	m_oTiles.SetSize(tileManagerWidth, tileManagerHeight);
 	// Set up the tiles
 	for (int x = 0; x < tileManagerWidth; x++)
-	for (int y = 0; y < tileManagerHeight; y++)
-		m_oTiles.SetValue(x, y, rand() % 31);			//sets value of mPdata array in tilemanager
+		for (int y = 0; y < tileManagerHeight; y++)
+			m_oTiles.SetValue(x, y, rand() % 31);			//sets value of mPdata array in tilemanager
 	// Specify the screen x,y of top left corner
 	m_oTiles.SetBaseTilesPositionOnScreen(100, 80);
 	// Tell it to draw tiles from x1,y1 to x2,y2 in tile array, to the background of this screen
@@ -110,7 +110,7 @@ void Psyjm6Engine::DrawStringsUnderneath()
 	std::string scoreStr = std::to_string(score);
 	const char *cstr = scoreStr.c_str();
 	// Then draw the new labels/strings
-	DrawScreenString(GetScreenWidth() - 100, 80, cstr, 0x1a0000, NULL);
+	DrawScreenString(GetScreenWidth() - 100, 80, cstr, 0x1a0000, NULL);	
 }
 
 

@@ -12,10 +12,12 @@
 #include "Demo3Main.h"
 #include "Demo4Main.h"
 #include "Psyjm6Engine.h"
+#include "TDPlayState.h"
+#include "TDIntroState.h"
+#include "TDStateManager.h"
 
 #define BASE_SCREEN_WIDTH 800
 #define BASE_SCREEN_HEIGHT 600
-
 
 
 int main(int argc, char *argv[])
@@ -32,14 +34,15 @@ int main(int argc, char *argv[])
 	//Demo2Main oMain;
 	//Demo3Main oMain;
 	//Demo4Main oMain;
-	Psyjm6Engine oMain;
-
-
+	//Psyjm6Engine oMain;
+	//TDPlayState oMain;
+	
 	char buf[1024];
-	sprintf( buf, "My Demonstration Program : Size %d x %d", BASE_SCREEN_WIDTH, BASE_SCREEN_HEIGHT );
-	iResult = oMain.Initialise( buf, BASE_SCREEN_WIDTH, BASE_SCREEN_HEIGHT, "Cornerstone Regular.ttf", 24 );
-	iResult = oMain.MainLoop();
-	oMain.Deinitialise();
+	
+	TDStateManager manager;
+
+	iResult = manager.SetState(1);
 
 	return iResult;
 }
+

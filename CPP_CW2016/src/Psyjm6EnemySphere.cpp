@@ -63,7 +63,6 @@ void Psyjm6EnemySphere::SetMovement(int iStartTime, int iEndTime, int iCurrentTi
 	m_oMover.Calculate(iCurrentTime);
 	m_iCurrentScreenX = m_oMover.GetX();
 	m_iCurrentScreenY = m_oMover.GetY();
-
 }
 
 void Psyjm6EnemySphere::DoUpdate(int iCurrentTime){

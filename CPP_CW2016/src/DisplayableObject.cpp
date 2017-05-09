@@ -4,6 +4,11 @@
 #include "BaseEngine.h"
 
 #include "DisplayableObject.h"
+#include <typeinfo>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 
 // Constructor

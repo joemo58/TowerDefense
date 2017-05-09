@@ -12,7 +12,7 @@
 #include "templates.h"
 
 
-
+using namespace std;
 
 /*
 Constructor.
@@ -24,7 +24,6 @@ BaseEngine::BaseEngine(int iUnusedSinceSDL2)
 , m_bNeedsRedraw(true)
 , m_bWholeScreenUpdate(true)
 , m_iNextTickToActOn(0)
-, m_ppDisplayableObjects(NULL)
 , m_iDrawableObjectsChanged(0)
 , g_pMainFont(NULL)
 , m_iMouseXClickedDown(0)
@@ -156,9 +155,10 @@ void BaseEngine::CreateObjectArray(int iNumberObjects)
 {
 	// Destroy any existing object array if it exists
 	DestroyOldObjects();
-	m_ppDisplayableObjects = new DisplayableObject*[iNumberObjects + 1];
+	m_ppDisplayableObjects.resize(iNumberObjects);
+	//m_ppDisplayableObjects = new DisplayableObject*[iNumberObjects + 1];
 	// Clear the array - set all elements to 0
-	memset(m_ppDisplayableObjects, 0, sizeof(DisplayableObject*) * (iNumberObjects + 1));
+	//memset(m_ppDisplayableObjects, 0, sizeof(DisplayableObject*) * (iNumberObjects + 1));
 }
 
 
@@ -166,6 +166,9 @@ void BaseEngine::CreateObjectArray(int iNumberObjects)
 
 void BaseEngine::StoreObjectInArray(int iIndex, DisplayableObject* pObject)
 {
+	if (iIndex > m_ppDisplayableObjects.size()){
+		m_ppDisplayableObjects.resize(100);
+	}
 	m_ppDisplayableObjects[iIndex] = pObject;
 }
 
@@ -173,6 +176,7 @@ void BaseEngine::StoreObjectInArray(int iIndex, DisplayableObject* pObject)
 /* Destroy any existing displayable objects */
 void BaseEngine::DestroyOldObjects()
 {
+	/*
 	// Record the fact that the drawable objects have changed.
 	m_iDrawableObjectsChanged = 1;
 
@@ -185,7 +189,15 @@ void BaseEngine::DestroyOldObjects()
 		}
 		delete[] m_ppDisplayableObjects;
 		m_ppDisplayableObjects = NULL;
+	}*/
+
+	m_iDrawableObjectsChanged = 1;
+
+	if (!m_ppDisplayableObjects.empty()){
+		m_ppDisplayableObjects.clear();
 	}
+
+
 }
 
 
@@ -381,20 +393,35 @@ void BaseEngine::GameRender(void)
 
 
 
-
+void BaseEngine::RemoveObject(int iIndex){
+	
+	m_iDrawableObjectsChanged = 0;
+	m_ppDisplayableObjects.erase(m_ppDisplayableObjects.begin() + iIndex);
+	if (iIndex == m_ppDisplayableObjects.size()){
+		StoreObjectInArray(iIndex, NULL);
+	}
+	if (m_iDrawableObjectsChanged)
+		return; // Abort! Something changed in the array
+}
 
 
 /* Tell all displayable objects to update themselves. Calls DoUpdate on each displayable object. */
 void BaseEngine::UpdateAllObjects( int iCurrentTime )
 {
 	m_iDrawableObjectsChanged = 0;
-	if ( m_ppDisplayableObjects != NULL )
+	if ( !m_ppDisplayableObjects.empty())
 	{
-		for ( int i = 0 ; m_ppDisplayableObjects[i] != NULL ; i++ )
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
 		{
-			m_ppDisplayableObjects[i]->DoUpdate(iCurrentTime);
-			if ( m_iDrawableObjectsChanged )
-				return; // Abort! Something changed in the array
+			if (!m_ppDisplayableObjects[i]->IsVisible()){
+				printf("object deleted\n");
+				RemoveObject(i);
+			}
+			else {
+				m_ppDisplayableObjects[i]->DoUpdate(iCurrentTime);
+				if (m_iDrawableObjectsChanged)
+					return; // Abort! Something changed in the array
+			}
 		}
 	}
 }
@@ -421,6 +448,7 @@ Overridable function, for adding custom clean-up in sub-classes.
 */
 void BaseEngine::CleanUp(void)
 {
+	UndrawObjects();
 }
 
 
@@ -467,8 +495,8 @@ void BaseEngine::CopyBackgroundPixels( int iX, int iY, int iWidth, int iHeight )
 	for ( int i = 0 ; i < iHeight ; i++ )
 	{
 		// Copy a line
-		for ( int j = 0 ; j < iWidth ; j++ )
-			*puiDest++ = *puiSource++;
+		for (int j = 0; j < iWidth; j++)
+				*puiDest++ = *puiSource++;
 		// Align on the next line
 		puiSource += iIncrement;
 		puiDest += iIncrement;
@@ -524,21 +552,6 @@ void BaseEngine::MouseUp( int iButton, int iX, int iY )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Fill the background - should be overridden to actually draw the correct thing. */
 void BaseEngine::SetupBackgroundBuffer()
 {
@@ -564,7 +577,7 @@ void BaseEngine::FillBackground(unsigned int uiPixelColour)
 void BaseEngine::DrawStrings()
 {
 	// First clear the area where they were originally drawn - i.e. undraw previous text
-	// e.g. CopyBackgroundBuffer()
+	// e.g. bBackgroundBuffer()
 	// Then draw the new labels/strings
 	//e.g. m_pFont->DrawString(m_pActualScreen, 100, 180, "The DrawScreen method needs to be overridden", 0xff00ff);
 }
@@ -606,7 +619,7 @@ Redraws the background behind each of the displayable objects, in their old posi
 */
 void BaseEngine::UndrawObjects()
 {
-	m_iDrawableObjectsChanged = 0;
+	/*m_iDrawableObjectsChanged = 0;
 	// This effectively un-draws the old positions of the objects
 	if ( m_ppDisplayableObjects != NULL )
 	{
@@ -616,7 +629,18 @@ void BaseEngine::UndrawObjects()
 			if ( m_iDrawableObjectsChanged )
 				return; // Abort! Something changed in the array
 		}
+	}*/
+	m_iDrawableObjectsChanged = 0;
+	if (!m_ppDisplayableObjects.empty())
+	{
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
+		{
+			m_ppDisplayableObjects[i]->RedrawBackground();
+			if (m_iDrawableObjectsChanged)
+				return; // Abort! Something changed in the array
+		}
 	}
+
 }
 
 
@@ -625,14 +649,13 @@ Draws draws the displayable objects in their new positions.
 */
 void BaseEngine::DrawObjects()
 {
-	m_iDrawableObjectsChanged= 0;
-	// And this re-draws the new positions
-	if ( m_ppDisplayableObjects != NULL )
+	m_iDrawableObjectsChanged = 0;
+	if (!m_ppDisplayableObjects.empty())
 	{
-		for ( int i = 0 ; m_ppDisplayableObjects[i] != NULL ; i++ )
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
 		{
 			m_ppDisplayableObjects[i]->Draw();
-			if ( m_iDrawableObjectsChanged )
+			if (m_iDrawableObjectsChanged)
 				return; // Abort! Something changed in the array
 		}
 	}
@@ -648,12 +671,22 @@ You may need to dynamic_cast the resulting pointer to the correct type.
 */
 DisplayableObject* BaseEngine::GetDisplayableObject( int iIndex )
 {
+	m_iDrawableObjectsChanged = 0;
+	if (!m_ppDisplayableObjects.empty())
+	{
+		return m_ppDisplayableObjects[iIndex];
+	}
+	else {
+		return NULL;
+	}
+	/*
 	if ( m_ppDisplayableObjects != NULL )
 	{
 		return m_ppDisplayableObjects[iIndex];
 	}
 	else
 		return NULL;
+	*/
 }
 
 
@@ -1177,11 +1210,12 @@ void BaseEngine::DrawShortenedLine( int iX1,int iY1,int iX2,int iY2,
 
 void BaseEngine::NotifyAllObjects( int iSignalNumber )
 {
-	if ( m_ppDisplayableObjects != NULL )
+
+	if ( !m_ppDisplayableObjects.empty() )
 	{
-		for ( int i = 0; m_ppDisplayableObjects[i] != NULL; i++ )
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
 		{
-			m_ppDisplayableObjects[i]->Notify( iSignalNumber );
+			m_ppDisplayableObjects[i]->Notify(iSignalNumber);
 		}
 	}
 }
@@ -1190,11 +1224,11 @@ void BaseEngine::NotifyAllObjects( int iSignalNumber )
 int BaseEngine::NotifyAllObjectsGetCountNonZero( int iSignalNumber )
 {
 	int iReturn = 0;
-	if ( m_ppDisplayableObjects != NULL )
+	if (!m_ppDisplayableObjects.empty())
 	{
-		for ( int i = 0; m_ppDisplayableObjects[i] != NULL; i++ )
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
 		{
-			if ( m_ppDisplayableObjects[i]->Notify( iSignalNumber ) != 0 )
+			if(m_ppDisplayableObjects[i]->Notify(iSignalNumber) != 0)
 				iReturn++;
 		}
 	}
@@ -1205,6 +1239,7 @@ int BaseEngine::NotifyAllObjectsGetCountNonZero( int iSignalNumber )
 int BaseEngine::NotifyAllObjectsGetSum( int iSignalNumber )
 {
 	int iReturn = 0;
+	/*
 	if ( m_ppDisplayableObjects != NULL )
 	{
 		for ( int i = 0; m_ppDisplayableObjects[i] != NULL; i++ )
@@ -1212,14 +1247,23 @@ int BaseEngine::NotifyAllObjectsGetSum( int iSignalNumber )
 			iReturn += m_ppDisplayableObjects[i]->Notify( iSignalNumber );
 		}
 	}
-	return iReturn;
+	return iReturn;*/
+
+	if (!m_ppDisplayableObjects.empty())
+	{
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
+		{
+			iReturn += m_ppDisplayableObjects[i]->Notify(iSignalNumber);
+		}
+	}
+	return iReturn; 
 }
 
 /* Send a specified notification value to all displayable objects and return the largest of the returned values. */
 int BaseEngine::NotifyAllObjectsGetMax( int iSignalNumber )
 {
 	int iReturn = INT_MIN;
-	if ( m_ppDisplayableObjects != NULL )
+	/*if ( m_ppDisplayableObjects != NULL )
 	{
 		for ( int i = 0; m_ppDisplayableObjects[i] != NULL; i++ )
 		{
@@ -1228,19 +1272,42 @@ int BaseEngine::NotifyAllObjectsGetMax( int iSignalNumber )
 				iReturn = ival;
 		}
 	}
+	return iReturn;*/
+
+	if (!m_ppDisplayableObjects.empty())
+	{
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
+		{
+			int ival = m_ppDisplayableObjects[i]->Notify(iSignalNumber);
+			if (ival > iReturn)
+				iReturn = ival;
+		}
+	}
 	return iReturn;
+
 }
 
 /* Send a specified notification value to all displayable objects and return the smallest of the returned values. */
 int BaseEngine::NotifyAllObjectsGetMin( int iSignalNumber )
 {
 	int iReturn = INT_MAX;
-	if ( m_ppDisplayableObjects != NULL )
+	/*if ( m_ppDisplayableObjects != NULL )
 	{
 		for ( int i = 0; m_ppDisplayableObjects[i] != NULL; i++ )
 		{
 			int ival = m_ppDisplayableObjects[i]->Notify( iSignalNumber );
 			if ( ival < iReturn )
+				iReturn = ival;
+		}
+	}
+	return iReturn;*/
+
+	if (!m_ppDisplayableObjects.empty())
+	{
+		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
+		{
+			int ival = m_ppDisplayableObjects[i]->Notify(iSignalNumber);
+			if (ival > iReturn)
 				iReturn = ival;
 		}
 	}

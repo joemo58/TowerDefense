@@ -2,6 +2,10 @@
 #define DISPLAYABLEOBJECT_H
 
 #include "BaseEngine.h"
+#include <string>
+#include <stdio.h>
+
+using namespace std;
 
 class DisplayableObject
 {
@@ -64,6 +68,9 @@ public:
 	}
 
 
+	virtual void DisplayableObject::PrintClassType(){
+	
+	}
 private:
 
 	// The rectangle on screen which must be updated.

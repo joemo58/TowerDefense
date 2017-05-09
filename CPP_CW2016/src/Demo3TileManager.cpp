@@ -23,7 +23,7 @@ void Demo3TileManager::DrawTileAt(
 	int iStartPositionScreenX, int iStartPositionScreenY ) const
 {
 	// Base class implementation just draws some grey tiles
-/*
+/*-1
 pEngine->DrawRectangle( 
 		iStartPositionScreenX,
 		iStartPositionScreenY, 
