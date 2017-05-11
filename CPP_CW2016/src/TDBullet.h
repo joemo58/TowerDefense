@@ -13,7 +13,7 @@ public:
 		int iStartX, int iStartY, int iEndX, int iEndY);
 private:
 	MovementPosition m_oMover;
-	int damage = 0;
+	int damage = 1;
 public:
 	void SetDamage(int damage);
 };

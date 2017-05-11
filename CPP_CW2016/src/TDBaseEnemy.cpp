@@ -2,23 +2,26 @@
 #include "templates.h"
 #include "TDBaseEnemy.h"
 #include "TDBaseTower.h"
-#include "JPGImage.h"
+#include "FontManager.h"
 #include <list>
 #include <stdlib.h>
 
 #include <time.h>
 
-TDBaseEnemy::TDBaseEnemy(BaseEngine* pEngine, int iMapX, int iMapY, int delay) : DisplayableObject(pEngine)
+TDBaseEnemy::TDBaseEnemy(BaseEngine* pEngine, int delay) : DisplayableObject(pEngine)
 {
 	this->delay = delay;
 	m_iDrawWidth = 17;
 	m_iDrawHeight = 17;
 	m_pEngine = pEngine;
-	m_iPreviousScreenX = m_iCurrentScreenX = iMapX;
-	m_iPreviousScreenY = m_iCurrentScreenY = iMapY;
+	m_iPreviousScreenX = m_iCurrentScreenX = GenerateSpawnX();
+	m_iPreviousScreenY = m_iCurrentScreenY = GenerateSpawnY();
+	// Load the image file into an image object - at the normal size
+	this->LoadImages();
 	SetTargetY();
 	//SetTargetY();
 	FindPath();
+	lastTickMs = newTickMs = GetEngine()->GetTime();
 	moveToSquare = closed.begin();
 	FollowPath();
 }
@@ -29,8 +32,30 @@ TDBaseEnemy::~TDBaseEnemy()
 
 /*Target for the enemies to aim towards*/
 int enemyTargetY = 0;
-int minYTarget = 250;
-int maxYTarget = 400;
+const int minYTarget = 150;
+const int maxYTarget = 450;
+int minYSpawn = 100;
+int maxYSpawn = 500;
+int fps = 12;
+int fpms = 1000 / fps;
+ImageData smallLam1, smallLam2, smallLam3, smallLam4, smallLam5, smallLam6;
+
+void TDBaseEnemy::LoadImages()
+{
+	llama1.LoadImage("llama1.png");
+	llama2.LoadImage("llama2.png");
+	llama3.LoadImage("llama3.png");
+	llama4.LoadImage("llama4.png");
+	llama5.LoadImage("llama5.png");
+	llama6.LoadImage("llama6.png");
+	smallLam1.ShrinkFrom(&llama1, 2);
+	smallLam2.ShrinkFrom(&llama2, 2);
+	smallLam3.ShrinkFrom(&llama3, 2);
+	smallLam4.ShrinkFrom(&llama4, 2);
+	smallLam5.ShrinkFrom(&llama5, 2);
+	smallLam6.ShrinkFrom(&llama6, 2);
+}
+
 
 /*path finding: A* algorithm using Manhattan distance as heurisic-h(n)*/
 list<TDBaseEnemy::mapSquare> TDBaseEnemy::FindPath(){
@@ -176,22 +201,49 @@ void TDBaseEnemy::Draw()
 	if (!IsVisible())
 		return;
 
-	ImageData im, im2;
-	// Load the image file into an image object - at the normal size
-	im2.LoadImage("enemy.png");
-	// Create a second image from the first, by halving the size
-	im.ShrinkFrom(&im2, 2);
+	string healthStr = to_string(health);
+	const char *healthCstr = healthStr.c_str();
+	GetEngine()->DrawScreenString(m_iCurrentScreenX, m_iCurrentScreenY - 10, healthCstr, 0xFF0000, 
+								GetEngine()->GetFont("Cornerstone Regular.ttf", 11));
 
-	im.RenderImageWithMask(GetEngine()->GetBackground(),
-		0, 0,
-		100, 100 ,
-		im.GetWidth(), im.GetHeight());
-
-	GetEngine()->DrawScreenOval(
-		m_iCurrentScreenX, m_iCurrentScreenY,
-		m_iCurrentScreenX + m_iDrawWidth - 1,
-		m_iCurrentScreenY + m_iDrawHeight - 1,
-		0xff3300);
+	switch (spriteNumber){
+	case 0:
+		smallLam1.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam1.GetWidth(), smallLam1.GetHeight());
+		break;
+	case 1:
+		smallLam2.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam2.GetWidth(), smallLam2.GetHeight());
+		break;
+	case 2:
+		smallLam3.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam3.GetWidth(), smallLam3.GetHeight());
+		break;
+	case 3:
+		smallLam4.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam4.GetWidth(), smallLam4.GetHeight());
+		break;
+	case 4:
+		smallLam5.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam5.GetWidth(), smallLam5.GetHeight());
+		break;
+	case 5:
+		smallLam6.RenderImageWithMask(GetEngine()->GetForeground(),
+			0, 0,
+			m_iCurrentScreenX, m_iCurrentScreenY,
+			smallLam6.GetWidth(), smallLam6.GetHeight());
+		break;
+	}
 
 	// This will store the position at which the object was drawn
 	// so that the background can be drawn over the top.	
@@ -228,28 +280,35 @@ void TDBaseEnemy::FollowPath(){
 	int movePositionY;
 	if (moveToSquare != closed.end()){
 		movePositionX = playStateEngine->GetTileWidth() * moveToSquare->x;
-		movePositionY = playStateEngine->GetTileWidth() * moveToSquare->y + 40;
+		movePositionY = playStateEngine->GetTileWidth() * moveToSquare->y + 40;		/*40 is the extra space taken up y status bar at top*/
 		SetMovement(GetEngine()->GetTime(), GetEngine()->GetTime() + (1000-speed), GetEngine()->GetTime(), m_iCurrentScreenX, m_iCurrentScreenY, movePositionX, movePositionY);
 		moveToSquare++;
 	}
 	else {
-		//delete enemy
-		if (IsVisible())
-			playStateEngine->ReducePlayerHealth(2);
-		/*show -1 on screen*/
+		//Reached end of path: delete enemy
+		if (IsVisible()){
+			playStateEngine->ReducePlayerHealth(1);
+			/*show -1 on screen*/
 			this->SetVisible(false);
+		}
 	}
 }
 
 void TDBaseEnemy::DoUpdate(int iCurrentTime)
 {
 	/*enemy dead*/
-	if (health <= 0){
-		if (IsVisible()){
-			playStateEngine->SetScore((playStateEngine->GetScore() + 100));
+	if (IsVisible()){
+		if (health <= 0){
+			playStateEngine->SetScore((playStateEngine->GetScore() + 30));
 			playStateEngine->SetMoney((playStateEngine->GetMoney() + 10));
-			SetVisible(false);
+			this->SetVisible(false);
 		}
+	}
+
+	newTickMs = iCurrentTime;
+	if ((newTickMs - lastTickMs) > fpms) {
+		lastTickMs = newTickMs;
+		ShowNextImageInSequence();
 	}
 
 	// Work out current position
@@ -270,6 +329,14 @@ void TDBaseEnemy::DoUpdate(int iCurrentTime)
 	RedrawObjects();
 }
 
+void TDBaseEnemy::ShowNextImageInSequence()
+{
+	this->spriteNumber++;
+	if (spriteNumber > 5) {
+		spriteNumber = 0;
+	}
+}
+
 
 int TDBaseEnemy::ManhattanDist(int iX1, int iY1, int iX2, int iY2){
 	
@@ -288,7 +355,10 @@ int TDBaseEnemy::GetDrawWidth()
 
 void TDBaseEnemy::ReduceHealth(int damage)
 {
-	health = -damage;
+	if (IsVisible()){
+		health -= damage;
+		printf("health = %d\n", health);
+	}
 }
 
 void TDBaseEnemy::SetTargetY()
@@ -312,4 +382,14 @@ int TDBaseEnemy::GetTargetX()
 int TDBaseEnemy::GetTargetY()
 {
 	return enemyTargetY;
+}
+
+int TDBaseEnemy::GenerateSpawnX(){
+	return 50;
+}
+int TDBaseEnemy::GenerateSpawnY(){
+	/*random seed from time*/
+	int randomY = rand() % (maxYSpawn - minYSpawn + 1) + minYSpawn;
+	printf("random spaw = %d\n", randomY);
+	return randomY;
 }

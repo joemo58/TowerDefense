@@ -6,6 +6,6 @@ class TDStateManager
 public:
 	TDStateManager();
 	~TDStateManager();
-	int SetState(int state);
+	int SetState(int state, bool newGame);
 };
 

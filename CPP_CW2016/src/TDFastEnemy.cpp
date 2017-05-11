@@ -4,7 +4,7 @@
 #include "JPGImage.h"
 
 
-TDFastEnemy::TDFastEnemy(BaseEngine* pEngine, int iMapX, int iMapY, int delay) : TDBaseEnemy(pEngine, iMapX, iMapY, delay)
+TDFastEnemy::TDFastEnemy(BaseEngine* pEngine, int delay) : TDBaseEnemy(pEngine, delay)
 {
 	speed = 700;
 }
@@ -20,16 +20,10 @@ void TDFastEnemy::Draw()
 	if (!IsVisible())
 		return;
 
-	ImageData im, im2;
-	// Load the image file into an image object - at the normal size
-	im2.LoadImage("enemy.png");
-	// Create a second image from the first, by halving the size
-	im.ShrinkFrom(&im2, 2);
-
-	im.RenderImageWithMask(GetEngine()->GetBackground(),
-		0, 0,
-		100, 100,
-		im.GetWidth(), im.GetHeight());
+	string healthStr = to_string(health);
+	const char *healthCstr = healthStr.c_str();
+	GetEngine()->DrawScreenString(m_iCurrentScreenX, m_iCurrentScreenY - 10, healthCstr, 0xFF0000,
+		GetEngine()->GetFont("Cornerstone Regular.ttf", 11));
 
 	GetEngine()->DrawScreenOval(
 		m_iCurrentScreenX, m_iCurrentScreenY,

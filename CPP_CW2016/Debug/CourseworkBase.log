@@ -1,8 +1,8 @@
-﻿Build started 09/05/2017 11:46:42.
+﻿Build started 11/05/2017 02:32:52.
      1>Project "C:\Users\joemo\OneDrive\Documents\CPP_CW2016\src\CourseworkBase.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\SDL\include /ZI /nologo /W1 /WX- /Od /Oy- /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\\" /Fd"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\vc120.pdb" /FR"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\\" /Gd /TP /analyze- /errorReport:prompt TDBaseEnemy.cpp TDPlayState.cpp
-         TDBaseEnemy.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\SDL\include /ZI /nologo /W1 /WX- /Od /Oy- /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\\" /Fd"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\vc120.pdb" /FR"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\\" /Gd /TP /analyze- /errorReport:prompt TDBaseTower.cpp TDPlayState.cpp
+         TDBaseTower.cpp
          TDPlayState.cpp
          Generating Code...
        Link:
@@ -44,12 +44,9 @@
          C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4Main.obj
          C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4Object.obj
          C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4TileManager.obj
-     1>DemoBObject.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
          CourseworkBase.vcxproj -> C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\CourseworkBase.exe
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\CourseworkBase.bsc" C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\DemoBObject.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\mainfunction.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\BaseEngine.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\DisplayableObject.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\FontManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\JPGImage.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Psyjm6Enemy.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Psyjm6EnemySphere.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Psyjm6Engine.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Psyjm6Player.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Psyjm6TileManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\SimpleDemo.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDBaseEnemy.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDBaseTower.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDBullet.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDFastEnemy.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDHelpState.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDIntroMenu.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDIntroState.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDPlayState.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDState.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDStateManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDStrongEnemy.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TDTileManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\TileManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\BouncingBall.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\BouncingBallMain.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo1Main.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo2Main.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo2Object.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo2TileManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo3Main.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo3Object.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo3ObjectFinished.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo3TileManager.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4Main.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4Object.sbr C:\Users\joemo\OneDrive\Documents\CPP_CW2016\/Debug\Demo4TileManager.sbr
      1>Done Building Project "C:\Users\joemo\OneDrive\Documents\CPP_CW2016\src\CourseworkBase.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.64
+Time Elapsed 00:00:04.77

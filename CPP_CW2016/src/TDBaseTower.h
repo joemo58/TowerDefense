@@ -1,6 +1,7 @@
 #pragma once
 #include "DisplayableObject.h"
 #include "TDPlayState.h"
+#include "JPGImage.h"
 #include <string>
 #include <iostream>
 
@@ -27,12 +28,13 @@ private:
 	int m_iCurrentMapSquareX = 0;
 	int m_iCurrentMapSquareY = 0;
 	int towerType = 1;
-	int damage = 5;
+	int damage = 1;
 	int health = 10;
-	int range = 80;
+	int range = 190;
 	int fireRate = 300;
-	int closestEnemyX = 0;
-	int closestEnemyY = 0;
+	int closestEnemyX = 102;
+	int closestEnemyY = 102;
+	ImageData towerImage, towerImageS;
 public:
 	void moveTower(int iX, int iY);
 	bool EnemyInRange();

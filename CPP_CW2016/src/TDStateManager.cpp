@@ -27,14 +27,14 @@ TDStateManager::~TDStateManager()
 
 char buf[1024];
 
-int TDStateManager::SetState(int state)
+int TDStateManager::SetState(int state, bool newGame)
 {
 	int iResult;
 	if (state == INTRO){
 		oMain = new TDIntroState(this);
 	} 
 	if (state == PLAY){
-		oMain = new TDPlayState(this);
+		oMain = new TDPlayState(this, newGame);
 	}
 
 	if (state == HELP){

@@ -396,9 +396,11 @@ void BaseEngine::GameRender(void)
 void BaseEngine::RemoveObject(int iIndex){
 	
 	m_iDrawableObjectsChanged = 0;
-	m_ppDisplayableObjects.erase(m_ppDisplayableObjects.begin() + iIndex);
 	if (iIndex == m_ppDisplayableObjects.size()){
 		StoreObjectInArray(iIndex, NULL);
+	}
+	else {
+		m_ppDisplayableObjects.erase(m_ppDisplayableObjects.begin() + iIndex);
 	}
 	if (m_iDrawableObjectsChanged)
 		return; // Abort! Something changed in the array
@@ -406,22 +408,22 @@ void BaseEngine::RemoveObject(int iIndex){
 
 
 /* Tell all displayable objects to update themselves. Calls DoUpdate on each displayable object. */
-void BaseEngine::UpdateAllObjects( int iCurrentTime )
+void BaseEngine::UpdateAllObjects(int iCurrentTime)
 {
 	m_iDrawableObjectsChanged = 0;
-	if ( !m_ppDisplayableObjects.empty())
+	if (!m_ppDisplayableObjects.empty())
 	{
 		for (int i = 0; m_ppDisplayableObjects[i] != NULL; i++)
 		{
-			if (!m_ppDisplayableObjects[i]->IsVisible()){
+			/*if (!m_ppDisplayableObjects[i]->IsVisible()){
 				printf("object deleted\n");
 				RemoveObject(i);
-			}
-			else {
-				m_ppDisplayableObjects[i]->DoUpdate(iCurrentTime);
-				if (m_iDrawableObjectsChanged)
-					return; // Abort! Something changed in the array
-			}
+				}
+				else {*/
+			m_ppDisplayableObjects[i]->DoUpdate(iCurrentTime);
+			if (m_iDrawableObjectsChanged)
+				return; // Abort! Something changed in the array
+			//}
 		}
 	}
 }

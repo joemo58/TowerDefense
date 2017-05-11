@@ -3,6 +3,7 @@
 #include "MovementPosition.h"
 #include "TDTileManager.h"
 #include "TDPlayState.h"
+#include "JPGImage.h"
 #include <iostream>
 #include <string>
 #include <list>
@@ -18,7 +19,7 @@ public:
 		int y;
 	};
 
-	TDBaseEnemy(BaseEngine* pEngine, int iMapX, int iMapY, int delay);
+	TDBaseEnemy(BaseEngine* pEngine, int delay);
 	~TDBaseEnemy();
 	list<mapSquare> FindPath();
 	mapSquare AddCurrentSquareToOpen();
@@ -36,7 +37,12 @@ public:
 	list<mapSquare> PopulateAdjacentSquares(mapSquare currentSquare);
 	void FollowPath();
 	void ReduceHealth(int damage);
-	
+	int GenerateSpawnX();
+	int GenerateSpawnY();
+	int GetDrawWidth();
+	void SetTargetY();
+	int GetTargetX();
+	int GetTargetY();
 	void TDBaseEnemy::PrintClassType(){
 		string s = typeid(this).name();
 		cout << "class created, type = " << s << endl;
@@ -59,12 +65,13 @@ protected:
 	double m_dSX = 0;
 	double m_dSY = 0;
 	int speed = 500;
-	int health = 5;
-
+	int health = 20;
+	ImageData llama1, llama2, llama3, llama4, llama5, llama6, strong;
+	int lastTickMs = 0;
+	int newTickMs = 0;
+	int spriteNumber = 0;
 public:
-	int GetDrawWidth();
-	void SetTargetY();
-	int GetTargetX();
-	int GetTargetY();
+	void LoadImages();
+	void ShowNextImageInSequence();
 };
 

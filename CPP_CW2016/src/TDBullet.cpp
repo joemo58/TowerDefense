@@ -3,13 +3,14 @@
 #include "TDBullet.h"
 #include "TDBaseEnemy.h"
 
+static int colCount = 0;
+
 TDBullet::TDBullet(BaseEngine* pEngine, int iMapX, int iMapY) : DisplayableObject(pEngine)
 {
 	m_iDrawWidth = 8;
 	m_iDrawHeight = 8;
 	m_iPreviousScreenX = m_iCurrentScreenX = iMapX;
 	m_iPreviousScreenY = m_iCurrentScreenY = iMapY;
-
 }
 
 
@@ -55,7 +56,8 @@ void TDBullet::DoUpdate(int iCurrentTime)
 
 	if (m_oMover.HasMovementFinished(iCurrentTime))
 	{
-		SetVisible(false);//also deletes it....
+		m_oMover.Calculate(iCurrentTime);
+		SetVisible(false);
 	}
 
 	/********** EXTRA STUFF FOR COLLISIONS *******/
@@ -80,12 +82,15 @@ void TDBullet::DoUpdate(int iCurrentTime)
 		if (((iXDiff*iXDiff) + (iYDiff*iYDiff))
 			<= ((m_iDrawWidth + iSizeOther)*(m_iDrawWidth + iSizeOther)))		//change the size to be same as enemy
 		{
-			/*delete bullet*/
-			printf("Collision!!");
-			/*Reduce the life of the enemy by whatever hitpoint the current bullet has*/
-			enemy->ReduceHealth(2);
-			//RedrawObjects();
-			return;
+			if (this->IsVisible()){
+				/*delete bullet*/
+				//colCount++;
+				printf("Collision!! Coll count  = %d\n", colCount);
+				/*Reduce the life of the enemy by whatever hitpoint the current bullet has*/
+				enemy->ReduceHealth(damage);
+				//RedrawObjects();
+				return;
+			}
 		}
 	}
 	/********* END EXTRA STUFF FOR COLLISIONS********/
@@ -94,5 +99,6 @@ void TDBullet::DoUpdate(int iCurrentTime)
 
 void TDBullet::SetDamage(int damage)
 {
+	printf("Bullet damage = %d\n", damage);
 	this->damage = damage;
 }

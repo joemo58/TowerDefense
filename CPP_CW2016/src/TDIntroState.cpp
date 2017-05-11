@@ -7,6 +7,15 @@
 TDIntroState::TDIntroState(TDStateManager* sm) : TDState()
 {
 	stateManager = sm;
+	dialogue.LoadImage("IntroDialogue.png");
+	playButton.LoadImage("play_button.png");
+	helpButton.LoadImage("help_button.png");
+	loadButton.LoadImage("load_button.png");
+	playButtonS.ShrinkFrom(&playButton, 2);
+	helpButtonS.ShrinkFrom(&helpButton, 2);
+	loadButtonS.ShrinkFrom(&loadButton, 2);
+	zombie.LoadImage("zombie_cartoon.png");
+	background.LoadImage("background_blood");
 }
 
 TDIntroState::~TDIntroState()
@@ -15,35 +24,24 @@ TDIntroState::~TDIntroState()
 
 void TDIntroState::SetupBackgroundBuffer()
 {
-	int tileManagerWidth = 20;
-	int tileManagerHeight = 20;
 
-	char* data[] = {
-		"222222222222222",
-		"aaaaaaaaaaaaaaa",
-		"aaaaaaaaaaaaaaa",
-		"aaaaaaaaaaaaaaa",
-		"baaaaaaaaaaaaab",
-		"badadadadadadab",
-		"baaaaaaaaaaaaab",
-		"baaaaaaaaaaaaab",
-		"baaaaaaaaaaaaab",
-		"baaaaaaaaaaaaab",
-		"bbbbbbbbbbbbbbb" };
 
-	//FillBackground green
-	FillBackground(0x4dff4d);
+	//FillBackground blue
+	FillBackground(0xffffff);
 
 	/*Status bar (top)*/
 	DrawBackgroundRectangle(0, 0, GetScreenWidth(), 40, 0x3e8ff2);
 
-	/*Menu box (center)*/
-	char* description = "A Tower Defense strategy game built using C++ 11 and SDL 2.0.\n";
-	DrawBackgroundRectangle(100, 100, GetScreenWidth() - 100, GetScreenHeight() - 200, 0x3e8ff2);
-	DrawBackgroundString(GetScreenWidth() / 4, 140, "Dirty Zombie Horde Defense", 0x1a0000, NULL);
-	DrawBackgroundString(GetScreenWidth() / 4, 200, description, 0x1a0000, NULL);
-	DrawBackgroundString(120, GetScreenHeight() - 185, "Space = Play", 0x1a0000, NULL);
-	DrawBackgroundString(GetScreenWidth() - 240, GetScreenHeight() - 185, "H = Help", 0x1a0000, NULL);
+	dialogue.RenderImageWithMask(GetBackground(), 0, 0, 10, 50,
+		dialogue.GetWidth(), dialogue.GetHeight());
+	zombie.RenderImageWithMask(GetBackground(), 0, 0, 540, 250,
+		zombie.GetWidth(), zombie.GetHeight());	
+	playButtonS.RenderImageWithMask(GetBackground(), 0, 0, 280, 400,
+		playButtonS.GetWidth(), playButtonS.GetHeight());
+	loadButtonS.RenderImageWithMask(GetBackground(), 0, 0, 280, 460,
+		loadButtonS.GetWidth(), loadButtonS.GetHeight());
+	helpButtonS.RenderImageWithMask(GetBackground(), 0, 0, 280, 520,
+		helpButtonS.GetWidth(), helpButtonS.GetHeight());
 	
 }
 
@@ -57,31 +55,29 @@ void TDIntroState::DrawStringsUnderneath()
 void TDIntroState::KeyDown(int iKeyCode)
 {
 	if (iKeyCode == SDLK_SPACE){
-		printf("enter down");
+		printf("continuing game");
 		//Deinitialise();
 		//SetExitWithCode(0);
-		stateManager->SetState(2);
+		stateManager->SetState(2, NULL);
+	}
+	if (iKeyCode == SDLK_n){
+		printf("New game starting");
+		//Deinitialise();
+		//SetExitWithCode(0);
+		stateManager->SetState(2, true);
 	}
 	if (iKeyCode == SDLK_h){
-		stateManager->SetState(3);
+		stateManager->SetState(3, NULL);
 	}
 }
 
 int TDIntroState::InitialiseObjects()
 {
-	/*
-	TDIntroMenu* mainMenu = new TDIntroMenu(this, 0, 0);
-	DrawableObjectsChanged();
-	// Destroy any existing objects
-	DestroyOldObjects();
-	// Creates an array to store the objects
-	// Needs to have room for the NULL at the end
-	CreateObjectArray(2);
-	// You MUST set the array entry after the last one that you create to NULL, so that the system knows when to stop.
-	// i.e. The LAST entry has to be NULL. The fact that it is NULL is used in order to work out where the end of the array is.
-	StoreObjectInArray(item_number, mainMenu);
-	item_number++;
-	StoreObjectInArray(item_number, NULL);
-	item_number++;	*/
 	return 0;
+}
+
+
+void TDIntroState::MouseDown(int iButton, int iX, int iY)
+{
+	//if (iX < 10 && iX < )
 }

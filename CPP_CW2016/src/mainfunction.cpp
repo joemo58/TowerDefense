@@ -41,7 +41,14 @@ int main(int argc, char *argv[])
 	
 	TDStateManager manager;
 
-	iResult = manager.SetState(1);
+	iResult = manager.SetState(1, NULL);
+
+	/*
+	sprintf(buf, "My Demonstration Program : Size %d x %d", BASE_SCREEN_WIDTH, BASE_SCREEN_HEIGHT);
+	iResult = oMain.Initialise(buf, BASE_SCREEN_WIDTH, BASE_SCREEN_HEIGHT, "Cornerstone Regular.ttf", 24);
+	iResult = oMain.MainLoop();
+	oMain.Deinitialise();
+	return iResult;*/
 
 	return iResult;
 }

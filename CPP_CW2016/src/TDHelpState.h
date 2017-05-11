@@ -1,5 +1,6 @@
 #pragma once
 #include "TDIntroState.h"
+#include "JPGImage.h"
 class TDHelpState :
 	public TDIntroState
 {
@@ -11,5 +12,9 @@ public:
 
 private:
 	TDStateManager* stateManager = NULL;
+	ImageData background1, background2, helpDialogue;
+public:
+	void MouseMoved(int iX, int iY);
+	void GameAction();
 };
 
